@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVC_Homework2020.Models;
@@ -41,6 +42,29 @@ namespace MVC_Homework2020.Controllers
             }
 
             return View(客戶);
+        }
+
+        public ActionResult Edit(int? id)
+        {
+            var 客戶 = db.客戶資料.FirstOrDefault(x => x.Id == id.Value);
+            if (客戶 == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest,"找不到客戶資料");
+            }
+            return View(客戶);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(客戶資料 客戶)
+        {
+            var ori客戶 = db.客戶資料.Find(客戶.Id);
+            if (TryUpdateModel(ori客戶))
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(ori客戶);
         }
     }
 }

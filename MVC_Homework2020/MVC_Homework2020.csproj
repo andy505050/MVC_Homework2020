@@ -215,6 +215,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\客戶資料\Index.cshtml" />
     <Content Include="Views\客戶資料\Create.cshtml" />
+    <Content Include="Views\客戶資料\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
