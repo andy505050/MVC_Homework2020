@@ -9,11 +9,16 @@ namespace MVC_Homework2020.Controllers
 {
     public class 客戶檢視Controller : Controller
     {
+        private 客戶檢視Repository repo;
+        public 客戶檢視Controller()
+        {
+            repo = RepositoryHelper.Get客戶檢視Repository();
+        }
+
         // GET: 客戶檢視
-        private 客戶資料Entities db = new 客戶資料Entities();
         public ActionResult Index()
         {
-            var data = db.客戶檢視;
+            var data = repo.All();
             return View(data);
         }
 
@@ -21,7 +26,7 @@ namespace MVC_Homework2020.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                repo.UnitOfWork.Context.Dispose();
             }
             base.Dispose(disposing);
         }
