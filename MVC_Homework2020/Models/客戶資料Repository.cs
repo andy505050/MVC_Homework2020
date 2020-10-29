@@ -34,6 +34,21 @@ namespace MVC_Homework2020.Models
             });
             return selectList;
         }
+
+        public IQueryable<客戶資料> Filter(string 搜尋客戶名稱, string 客戶分類)
+        {
+            var data = All();
+            if (!string.IsNullOrEmpty(搜尋客戶名稱))
+            {
+                data = data.Where(x => x.客戶名稱.Contains(搜尋客戶名稱));
+
+            }
+            if (!string.IsNullOrEmpty(客戶分類))
+            {
+                data = data.Where(x => x.客戶分類 == 客戶分類);
+            }
+            return data;
+        }
     }
 
     public interface I客戶資料Repository : IRepository<客戶資料>
