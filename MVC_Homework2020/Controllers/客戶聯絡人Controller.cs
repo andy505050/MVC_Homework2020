@@ -12,12 +12,18 @@ namespace MVC_Homework2020.Controllers
 {
     public class 客戶聯絡人Controller : Controller
     {
-        private 客戶資料Entities db = new 客戶資料Entities();
+        private 客戶聯絡人Repository repo;
+        private 客戶資料Repository repo客戶資料;
+        public 客戶聯絡人Controller()
+        {
+            repo = RepositoryHelper.Get客戶聯絡人Repository();
+            repo客戶資料 = RepositoryHelper.Get客戶資料Repository(repo.UnitOfWork);
+        }
 
         // GET: 客戶聯絡人
         public ActionResult Index(string keyword)
         {
-            var data = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(x => x.是否已刪除 == false);
+            var data = repo.All();
             if (!string.IsNullOrEmpty(keyword))
             {
                 data = data.Where(x =>
@@ -36,7 +42,7 @@ namespace MVC_Homework2020.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = repo.All().FirstOrDefault(x => x.Id == id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
@@ -47,7 +53,7 @@ namespace MVC_Homework2020.Controllers
         // GET: 客戶聯絡人/Create
         public ActionResult Create()
         {
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱");
+            ViewBag.客戶Id = new SelectList(repo客戶資料.All(), "Id", "客戶名稱");
             return View();
         }
 
@@ -60,12 +66,12 @@ namespace MVC_Homework2020.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.客戶聯絡人.Add(客戶聯絡人);
-                db.SaveChanges();
+                repo.Add(客戶聯絡人);
+                repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            ViewBag.客戶Id = new SelectList(repo客戶資料.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
 
@@ -76,12 +82,13 @@ namespace MVC_Homework2020.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+
+            客戶聯絡人 客戶聯絡人 = repo.All().FirstOrDefault(x => x.Id == id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            ViewBag.客戶Id = new SelectList(repo客戶資料.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
 
@@ -92,13 +99,13 @@ namespace MVC_Homework2020.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話")] 客戶聯絡人 客戶聯絡人)
         {
-            var ori客戶聯絡人 = db.客戶聯絡人.Find(客戶聯絡人.Id);
+            var ori客戶聯絡人 = repo.All().FirstOrDefault(x => x.Id == 客戶聯絡人.Id);
             if (TryUpdateModel(ori客戶聯絡人))
             {
-                db.SaveChanges();
+                repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            ViewBag.客戶Id = new SelectList(repo客戶資料.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
 
@@ -109,13 +116,13 @@ namespace MVC_Homework2020.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = repo.All().FirstOrDefault(x => x.Id == id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
             }
-            客戶聯絡人.是否已刪除 = true;
-            db.SaveChanges();
+
+            repo.UnitOfWork.Commit();
             return RedirectToAction("Index");
         }
 
@@ -123,7 +130,7 @@ namespace MVC_Homework2020.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                repo.UnitOfWork.Context.Dispose();
             }
             base.Dispose(disposing);
         }
