@@ -40,6 +40,7 @@ namespace MVC_Homework2020.Models
         [EmailAddress]
         public string Email { get; set; }
 
+        [CellPhone]
         [StringLength(50, ErrorMessage = "欄位長度不得大於 50 個字元")]
         public string 手機 { get; set; }
 
