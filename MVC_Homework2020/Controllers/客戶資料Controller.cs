@@ -23,5 +23,24 @@ namespace MVC_Homework2020.Controllers
 
             return View(data);
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(客戶資料 客戶)
+        {
+            if (ModelState.IsValid)
+            {
+                db.客戶資料.Add(客戶);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(客戶);
+        }
     }
 }
