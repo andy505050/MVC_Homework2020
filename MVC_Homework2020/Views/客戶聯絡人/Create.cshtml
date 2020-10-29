@@ -7,10 +7,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>客戶聯絡人</h4>
         <hr />
@@ -77,4 +77,17 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $.validator.addMethod("cellphoneformaterror",
+            function (value, element) {
+                if (value == false) {
+                    return true;
+                }
+                if (/^\d{4}-\d{6}$/.test(value)) {
+                    return true;
+                }
+                return false;
+            });
+        $.validator.unobtrusive.adapters.addBool("cellphoneformaterror");
+    </script>
 }
