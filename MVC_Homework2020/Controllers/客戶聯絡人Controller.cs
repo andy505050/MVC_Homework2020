@@ -21,17 +21,11 @@ namespace MVC_Homework2020.Controllers
         }
 
         // GET: 客戶聯絡人
-        public ActionResult Index(string keyword)
+        public ActionResult Index(string keyword, string 職稱)
         {
-            var data = repo.All();
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                data = data.Where(x =>
-                    x.姓名.Contains(keyword) ||
-                    x.Email.Contains(keyword) ||
-                    x.客戶資料.客戶名稱.Contains(keyword));
-                ViewBag.keyword = keyword;
-            }
+            var data = repo.Filter(keyword, 職稱);
+            ViewBag.keyword = keyword;
+            ViewBag.職稱 = repo.TitleList(職稱);
             return View(data);
         }
 
