@@ -12,12 +12,18 @@ namespace MVC_Homework2020.Controllers
 {
     public class 客戶銀行資訊Controller : Controller
     {
-        private 客戶資料Entities db = new 客戶資料Entities();
+        private 客戶銀行資訊Repository repo;
+        private 客戶資料Repository repo客戶資料;
+        public 客戶銀行資訊Controller()
+        {
+            repo = RepositoryHelper.Get客戶銀行資訊Repository();
+            repo客戶資料 = RepositoryHelper.Get客戶資料Repository(repo.UnitOfWork);
+        }
 
         // GET: 客戶銀行資訊
         public ActionResult Index(string keyword)
         {
-            var data = db.客戶銀行資訊.Include(客 => 客.客戶資料).Where(x => x.是否已刪除 == false);
+            var data = repo.All();
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -38,18 +44,20 @@ namespace MVC_Homework2020.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶銀行資訊 客戶銀行資訊 = db.客戶銀行資訊.Find(id);
+            客戶銀行資訊 客戶銀行資訊 = repo.All().FirstOrDefault(x => x.Id == id.Value);
             if (客戶銀行資訊 == null)
             {
                 return HttpNotFound();
             }
             return View(客戶銀行資訊);
+
+
         }
 
         // GET: 客戶銀行資訊/Create
         public ActionResult Create()
         {
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱");
+            ViewBag.客戶Id = new SelectList(repo客戶資料.All(), "Id", "客戶名稱");
             return View();
         }
 
@@ -62,12 +70,12 @@ namespace MVC_Homework2020.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.客戶銀行資訊.Add(客戶銀行資訊);
-                db.SaveChanges();
+                repo.Add(客戶銀行資訊);
+                repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
+            ViewBag.客戶Id = new SelectList(repo客戶資料.All(), "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
             return View(客戶銀行資訊);
         }
 
@@ -78,12 +86,12 @@ namespace MVC_Homework2020.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶銀行資訊 客戶銀行資訊 = db.客戶銀行資訊.Find(id);
+            客戶銀行資訊 客戶銀行資訊 = repo.All().FirstOrDefault(x => x.Id == id.Value);
             if (客戶銀行資訊 == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
+            ViewBag.客戶Id = new SelectList(repo客戶資料.All(), "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
             return View(客戶銀行資訊);
         }
 
@@ -94,13 +102,13 @@ namespace MVC_Homework2020.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,客戶Id,銀行名稱,銀行代碼,分行代碼,帳戶名稱,帳戶號碼")] 客戶銀行資訊 客戶銀行資訊)
         {
-            var ori客戶銀行資訊 = db.客戶銀行資訊.Find(客戶銀行資訊.Id);
+            var ori客戶銀行資訊 = repo.All().FirstOrDefault(x => x.Id == 客戶銀行資訊.Id);
             if (TryUpdateModel(ori客戶銀行資訊))
             {
-                db.SaveChanges();
+                repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
+            ViewBag.客戶Id = new SelectList(repo客戶資料.All(), "Id", "客戶名稱", 客戶銀行資訊.客戶Id);
             return View(客戶銀行資訊);
         }
 
@@ -111,13 +119,13 @@ namespace MVC_Homework2020.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶銀行資訊 客戶銀行資訊 = db.客戶銀行資訊.Find(id);
+            客戶銀行資訊 客戶銀行資訊 = repo.All().FirstOrDefault(x => x.Id == id.Value);
             if (客戶銀行資訊 == null)
             {
                 return HttpNotFound();
             }
-            客戶銀行資訊.是否已刪除 = true;
-            db.SaveChanges();
+            repo.Delete(客戶銀行資訊);
+            repo.UnitOfWork.Commit();
             return RedirectToAction("Index");
         }
 
@@ -125,7 +133,7 @@ namespace MVC_Homework2020.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                repo.UnitOfWork.Context.Dispose();
             }
             base.Dispose(disposing);
         }
