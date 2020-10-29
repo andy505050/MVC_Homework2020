@@ -121,7 +121,7 @@ namespace MVC_Homework2020.Controllers
             {
                 return HttpNotFound();
             }
-
+            repo.Delete(客戶聯絡人);
             repo.UnitOfWork.Commit();
             return RedirectToAction("Index");
         }
