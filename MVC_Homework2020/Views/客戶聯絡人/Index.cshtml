@@ -8,6 +8,13 @@
 
 <p>
     @Html.ActionLink("Create New", "Create")
+    @using (Html.BeginForm())
+    {
+
+        @("關鍵字：")
+        <input type="text" name="keyword" value="@ViewBag.keyword" />
+        <button type="submit">搜尋</button>
+    }
 </p>
 <table class="table">
     <tr>

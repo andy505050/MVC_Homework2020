@@ -15,10 +15,18 @@ namespace MVC_Homework2020.Controllers
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: 客戶聯絡人
-        public ActionResult Index()
+        public ActionResult Index(string keyword)
         {
-            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料);
-            return View(客戶聯絡人);
+            var data = db.客戶聯絡人.Include(客 => 客.客戶資料);
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                data = data.Where(x =>
+                    x.姓名.Contains(keyword) ||
+                    x.Email.Contains(keyword) ||
+                    x.客戶資料.客戶名稱.Contains(keyword));
+                ViewBag.keyword = keyword;
+            }
+            return View(data);
         }
 
         // GET: 客戶聯絡人/Details/5
