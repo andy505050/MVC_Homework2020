@@ -18,7 +18,7 @@ namespace MVC_Homework2020.Controllers
         public ActionResult Index()
         {
             var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料);
-            return View(客戶聯絡人.ToList());
+            return View(客戶聯絡人);
         }
 
         // GET: 客戶聯絡人/Details/5
@@ -84,9 +84,9 @@ namespace MVC_Homework2020.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話")] 客戶聯絡人 客戶聯絡人)
         {
-            if (ModelState.IsValid)
+            var ori客戶聯絡人 = db.客戶聯絡人.Find(客戶聯絡人.Id);
+            if (TryUpdateModel(ori客戶聯絡人))
             {
-                db.Entry(客戶聯絡人).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -106,15 +106,6 @@ namespace MVC_Homework2020.Controllers
             {
                 return HttpNotFound();
             }
-            return View(客戶聯絡人);
-        }
-
-        // POST: 客戶聯絡人/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
             db.客戶聯絡人.Remove(客戶聯絡人);
             db.SaveChanges();
             return RedirectToAction("Index");
