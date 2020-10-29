@@ -17,7 +17,7 @@ namespace MVC_Homework2020.Controllers
         // GET: 客戶銀行資訊
         public ActionResult Index(string keyword)
         {
-            var data = db.客戶銀行資訊.Include(客 => 客.客戶資料);
+            var data = db.客戶銀行資訊.Include(客 => 客.客戶資料).Where(x => x.是否已刪除 == false);
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -116,7 +116,7 @@ namespace MVC_Homework2020.Controllers
             {
                 return HttpNotFound();
             }
-            db.客戶銀行資訊.Remove(客戶銀行資訊);
+            客戶銀行資訊.是否已刪除 = true;
             db.SaveChanges();
             return RedirectToAction("Index");
         }

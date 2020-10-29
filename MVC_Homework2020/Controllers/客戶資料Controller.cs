@@ -14,8 +14,7 @@ namespace MVC_Homework2020.Controllers
         // GET: 客戶資料
         public ActionResult Index(string 搜尋客戶名稱)
         {
-            var data = db.客戶資料.AsQueryable();
-
+            var data = db.客戶資料.Where(x => x.是否已刪除 == false);
             if (!string.IsNullOrEmpty(搜尋客戶名稱))
             {
                 data = data.Where(x => x.客戶名稱.Contains(搜尋客戶名稱));
@@ -75,7 +74,7 @@ namespace MVC_Homework2020.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "找不到客戶資料");
             }
 
-            db.客戶資料.Remove(客戶);
+            客戶.是否已刪除 = true;
             db.SaveChanges();
             return RedirectToAction("Index");
         }

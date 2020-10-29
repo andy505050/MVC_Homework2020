@@ -17,7 +17,7 @@ namespace MVC_Homework2020.Controllers
         // GET: 客戶聯絡人
         public ActionResult Index(string keyword)
         {
-            var data = db.客戶聯絡人.Include(客 => 客.客戶資料);
+            var data = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(x => x.是否已刪除 == false);
             if (!string.IsNullOrEmpty(keyword))
             {
                 data = data.Where(x =>
@@ -114,7 +114,7 @@ namespace MVC_Homework2020.Controllers
             {
                 return HttpNotFound();
             }
-            db.客戶聯絡人.Remove(客戶聯絡人);
+            客戶聯絡人.是否已刪除 = true;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
