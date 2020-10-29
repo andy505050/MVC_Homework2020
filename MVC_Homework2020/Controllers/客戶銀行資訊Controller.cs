@@ -18,7 +18,7 @@ namespace MVC_Homework2020.Controllers
         public ActionResult Index()
         {
             var 客戶銀行資訊 = db.客戶銀行資訊.Include(客 => 客.客戶資料);
-            return View(客戶銀行資訊.ToList());
+            return View(客戶銀行資訊);
         }
 
         // GET: 客戶銀行資訊/Details/5
@@ -84,9 +84,9 @@ namespace MVC_Homework2020.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,客戶Id,銀行名稱,銀行代碼,分行代碼,帳戶名稱,帳戶號碼")] 客戶銀行資訊 客戶銀行資訊)
         {
-            if (ModelState.IsValid)
+            var ori客戶銀行資訊 = db.客戶銀行資訊.Find(客戶銀行資訊.Id);
+            if (TryUpdateModel(ori客戶銀行資訊))
             {
-                db.Entry(客戶銀行資訊).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -106,15 +106,6 @@ namespace MVC_Homework2020.Controllers
             {
                 return HttpNotFound();
             }
-            return View(客戶銀行資訊);
-        }
-
-        // POST: 客戶銀行資訊/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            客戶銀行資訊 客戶銀行資訊 = db.客戶銀行資訊.Find(id);
             db.客戶銀行資訊.Remove(客戶銀行資訊);
             db.SaveChanges();
             return RedirectToAction("Index");
