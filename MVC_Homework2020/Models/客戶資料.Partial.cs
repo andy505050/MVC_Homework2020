@@ -36,6 +36,9 @@ namespace MVC_Homework2020.Models
         [StringLength(250, ErrorMessage="欄位長度不得大於 250 個字元")]
         public string Email { get; set; }
 
+        [StringLength(50, ErrorMessage = "欄位長度不得大於 50 個字元")]
+        public string 客戶分類 { get; set; }
+
         public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }
         public virtual ICollection<客戶聯絡人> 客戶聯絡人 { get; set; }
     }

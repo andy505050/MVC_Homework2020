@@ -18,20 +18,27 @@ namespace MVC_Homework2020.Controllers
         }
 
         // GET: 客戶資料
-        public ActionResult Index(string 搜尋客戶名稱)
+        public ActionResult Index(string 搜尋客戶名稱, string 客戶分類)
         {
             var data = repo.All();
             if (!string.IsNullOrEmpty(搜尋客戶名稱))
             {
                 data = data.Where(x => x.客戶名稱.Contains(搜尋客戶名稱));
-                ViewBag.搜尋客戶名稱 = 搜尋客戶名稱;
+
+            }
+            if (!string.IsNullOrEmpty(客戶分類))
+            {
+                data = data.Where(x => x.客戶分類 == 客戶分類);
             }
 
+            ViewBag.搜尋客戶名稱 = 搜尋客戶名稱;
+            ViewBag.客戶分類 = repo.客戶分類清單(客戶分類);
             return View(data);
         }
 
         public ActionResult Create()
         {
+            ViewBag.客戶分類 = repo.客戶分類清單();
             return View();
         }
 
@@ -45,7 +52,7 @@ namespace MVC_Homework2020.Controllers
                 repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.客戶分類 = repo.客戶分類清單(客戶.客戶分類);
             return View(客戶);
         }
 
@@ -56,6 +63,7 @@ namespace MVC_Homework2020.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "找不到客戶資料");
             }
+            ViewBag.客戶分類 = repo.客戶分類清單(客戶.客戶分類);
             return View(客戶);
         }
 
@@ -69,6 +77,7 @@ namespace MVC_Homework2020.Controllers
                 repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
+            ViewBag.客戶分類 = repo.客戶分類清單(ori客戶.客戶分類);
             return View(ori客戶);
         }
 
