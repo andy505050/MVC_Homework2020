@@ -66,5 +66,18 @@ namespace MVC_Homework2020.Controllers
             }
             return View(ori客戶);
         }
+
+        public ActionResult Delete(int? id)
+        {
+            var 客戶 = db.客戶資料.FirstOrDefault(x => x.Id == id.Value);
+            if (客戶 == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "找不到客戶資料");
+            }
+
+            db.客戶資料.Remove(客戶);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
