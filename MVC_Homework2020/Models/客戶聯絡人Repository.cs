@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Web.Mvc;
@@ -41,6 +42,24 @@ namespace MVC_Homework2020.Models
                     x.職稱 == 職稱);
             }
             return data;
+        }
+
+        public IOrderedQueryable<客戶聯絡人> OrderBy(IQueryable<客戶聯絡人> data, SortInfo sortInfo)
+        {
+            var sortDirection = "asc";
+            var currentSortCol = "ID";
+
+            if (!string.IsNullOrEmpty(sortInfo.CurrentSortCol))
+            {
+                currentSortCol = sortInfo.CurrentSortCol;
+            }
+
+            if (sortInfo.CurrentSortCol == sortInfo.OriSortCol)
+            {
+                sortDirection = sortInfo.SortDirection;
+            }
+
+            return data.OrderBy($"{currentSortCol} {sortDirection}");
         }
     }
 

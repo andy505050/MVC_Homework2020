@@ -21,11 +21,15 @@ namespace MVC_Homework2020.Controllers
         }
 
         // GET: 客戶聯絡人
-        public ActionResult Index(string keyword, string 職稱)
+        public ActionResult Index(string keyword, string 職稱, SortInfo sortInfo)
         {
             var data = repo.Filter(keyword, 職稱);
+            data = repo.OrderBy(data, sortInfo);
+
             ViewBag.keyword = keyword;
             ViewBag.職稱 = repo.TitleList(職稱);
+            ViewBag.SortDirection = sortInfo.SortDirection == "asc" ? "desc" : "asc";
+            ViewBag.OriSortCol = sortInfo.CurrentSortCol;
             return View(data);
         }
 
