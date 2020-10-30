@@ -18,11 +18,15 @@ namespace MVC_Homework2020.Controllers
         }
 
         // GET: 客戶資料
-        public ActionResult Index(string 搜尋客戶名稱, string 客戶分類)
+        public ActionResult Index(string 搜尋客戶名稱, string 客戶分類, SortInfo sortInfo)
         {
             var data = repo.Filter(搜尋客戶名稱, 客戶分類);
+            data = repo.OrderBy(data, sortInfo);
+
             ViewBag.搜尋客戶名稱 = 搜尋客戶名稱;
             ViewBag.客戶分類 = repo.客戶分類清單(客戶分類);
+            ViewBag.SortDirection = sortInfo.SortDirection == "asc" ? "desc" : "asc";
+            ViewBag.OriSortCol = sortInfo.CurrentSortCol;
             return View(data);
         }
 
