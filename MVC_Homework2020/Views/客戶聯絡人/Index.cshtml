@@ -15,7 +15,7 @@
         <input type="text" name="keyword" value="@ViewBag.keyword" />
         @Html.DropDownList("職稱", (IEnumerable<SelectListItem>)ViewBag.職稱, "請選擇")
         <button type="submit">搜尋</button>
-
+        <button type="submit" name="submitBtn" value="export">匯出</button>
     </p>
     <table class="table">
         <tr>

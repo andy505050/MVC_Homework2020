@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using ClosedXML.Excel;
 using MVC_Homework2020.Models;
 
 namespace MVC_Homework2020.Controllers
@@ -21,9 +23,14 @@ namespace MVC_Homework2020.Controllers
         }
 
         // GET: 客戶聯絡人
-        public ActionResult Index(string keyword, string 職稱, SortInfo sortInfo)
+        public ActionResult Index(string keyword, string 職稱, SortInfo sortInfo, string submitBtn)
         {
             var data = repo.Filter(keyword, 職稱);
+            if (submitBtn == "export")
+            {
+                return Export(data);
+            }
+
             data = repo.OrderBy(data, sortInfo);
 
             ViewBag.keyword = keyword;
@@ -31,6 +38,23 @@ namespace MVC_Homework2020.Controllers
             ViewBag.SortDirection = sortInfo.SortDirection == "asc" ? "desc" : "asc";
             ViewBag.OriSortCol = sortInfo.CurrentSortCol;
             return View(data);
+        }
+
+        public ActionResult Export(IEnumerable<客戶聯絡人> 客戶聯絡人清單)
+        {
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var data = 客戶聯絡人清單.Select(x => new { x.姓名, x.職稱, x.電話 });
+                var ws = wb.Worksheets.Add("客戶聯絡人");
+                ws.Cell(1, 1).Value = data;
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    wb.SaveAs(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    return File(memoryStream.ToArray(), "application/vnd.ms-excel", "Download.xlsx");
+                }
+            }
         }
 
         // GET: 客戶聯絡人/Details/5
