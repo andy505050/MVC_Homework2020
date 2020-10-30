@@ -1,74 +1,105 @@
 ﻿@model IEnumerable<MVC_Homework2020.Models.客戶資料>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-    @using (Html.BeginForm())
-    {
-
+@Html.ActionLink("Create New", "Create")
+@using (Html.BeginForm())
+{
+    <p>
         @("客戶名稱：")
         <input type="text" name="搜尋客戶名稱" value="@ViewBag.搜尋客戶名稱" />
         @Html.DropDownList("客戶分類", (IEnumerable<SelectListItem>)ViewBag.客戶分類, "請選擇")
         <button type="submit">搜尋</button>
-    }
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.客戶名稱)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.客戶分類)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.統一編號)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.電話)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.傳真)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.地址)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th></th>
-    </tr>
+    </p>
 
-    @foreach (var item in Model)
-    {
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.客戶名稱)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.客戶分類)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.客戶名稱)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.統一編號)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.電話)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.傳真)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.地址)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('是否確定刪除?');" })
-            </td>
+            <th>
+                <a href="#" class="sort-link">
+                    @Html.DisplayNameFor(model => model.客戶名稱)
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link">
+                    @Html.DisplayNameFor(model => model.客戶分類)
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link">
+                    @Html.DisplayNameFor(model => model.統一編號)
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link">
+                    @Html.DisplayNameFor(model => model.電話)
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link">
+                    @Html.DisplayNameFor(model => model.傳真)
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link">
+                    @Html.DisplayNameFor(model => model.地址)
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link">
+                    @Html.DisplayNameFor(model => model.Email)
+                </a>
+            </th>
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.客戶名稱)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.客戶分類)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.客戶名稱)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.統一編號)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.電話)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.傳真)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.地址)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('是否確定刪除?');" })
+                </td>
+            </tr>
+        }
+
+    </table>
+    <input type="hidden" name="CurrentSortCol" id="CurrentSortCol" />
+    <input type="hidden" name="OriSortCol" value="@ViewBag.OriSortCol" />
+    <input type="hidden" name="SortDirection" value="@ViewBag.SortDirection" />
+}
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $("a.sort-link").on("click", function (e) {
+                e.preventDefault();
+                var name = $(this).text().trim();
+                $("#CurrentSortCol").val(name);
+                $("form").submit();
+            });
+        });
+    </script>
+}
