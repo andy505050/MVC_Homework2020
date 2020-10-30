@@ -8,6 +8,7 @@
         <input type="text" name="搜尋客戶名稱" value="@ViewBag.搜尋客戶名稱" />
         @Html.DropDownList("客戶分類", (IEnumerable<SelectListItem>)ViewBag.客戶分類, "請選擇")
         <button type="submit">搜尋</button>
+        <button type="submit" name="submitBtn" value="export">匯出</button>
     </p>
 
     <table class="table">
