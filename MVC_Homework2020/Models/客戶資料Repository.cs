@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -48,6 +49,24 @@ namespace MVC_Homework2020.Models
                 data = data.Where(x => x.客戶分類 == 客戶分類);
             }
             return data;
+        }
+
+        public IOrderedQueryable<客戶資料> OrderBy(IQueryable<客戶資料> data, SortInfo sortInfo)
+        {
+            var sortDirection = "asc";
+            var currentSortCol = "ID";
+
+            if (!string.IsNullOrEmpty(sortInfo.CurrentSortCol))
+            {
+                currentSortCol = sortInfo.CurrentSortCol;
+            }
+
+            if (sortInfo.CurrentSortCol == sortInfo.OriSortCol)
+            {
+                sortDirection = sortInfo.SortDirection;
+            }
+
+            return data.OrderBy($"{currentSortCol} {sortDirection}");
         }
     }
 
