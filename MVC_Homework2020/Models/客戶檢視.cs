@@ -14,7 +14,7 @@ namespace MVC_Homework2020.Models
     
     public partial class 客戶檢視
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string 客戶名稱 { get; set; }
         public Nullable<int> 聯絡人數量 { get; set; }
         public Nullable<int> 銀行帳戶數量 { get; set; }
